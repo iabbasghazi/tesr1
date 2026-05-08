@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/png" href="logo192.png">
-
-    <link rel="apple-touch-icon" href="logo192.png">
-
-    <meta name="theme-color" content="#ff007a">
-    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ghazi Abbas | Final Legend Tracker</title>
+    
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/m2PRngnY/logo512-png.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/m2PRngnY/logo512-png.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#ff007a">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -211,7 +212,6 @@ function openAna(){
 }
 function closeAna(){ document.getElementById('pop').style.display='none'; }
 
-// BIG SNOW
 const cvs = document.getElementById('snow'); const ctx = cvs.getContext('2d');
 let pts = []; function res(){ cvs.width=window.innerWidth; cvs.height=window.innerHeight; } window.onresize=res; res();
 class P { constructor(){this.r();} r(){this.x=Math.random()*cvs.width;this.y=Math.random()*cvs.height;this.v=0.4+Math.random();this.s=2.5+Math.random()*3.5;} u(){this.y+=this.v;if(this.y>cvs.height)this.y=-10;} d(){ctx.fillStyle='rgba(255,255,255,0.4)';ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,Math.PI*2);ctx.fill();}}
