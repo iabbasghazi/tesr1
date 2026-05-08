@@ -4,88 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ghazi Abbas | Legend Study Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg: #03050a; --card: rgba(12, 16, 24, 0.9); --pink: #ff007a; --blue: #00d2ff;
             --green: #00ff88; --yellow: #ffcc00; --text: #e0e6ed;
         }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
-
-        body {
-            font-family: 'Poppins', sans-serif; background: var(--bg);
-            color: var(--text); overflow-x: hidden; min-height: 100vh;
-        }
-
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
         #snow { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
         .container { width: min(1500px, 96%); margin: auto; padding-bottom: 150px; }
 
-        /* HEADER GLOW */
+        /* HEADER */
         .header { padding: 60px 0 40px; text-align: center; }
-        .brand h1 { 
-            font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; 
-            color: #fff; text-shadow: 0 0 20px var(--pink), 0 0 40px var(--pink);
-            letter-spacing: -2px;
-        }
+        .brand h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; color: #fff; text-shadow: 0 0 20px var(--pink); letter-spacing: -2px; }
 
-        /* TIMER GRID */
+        /* TIMERS */
         .timer-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
-        .year-block { background: var(--card); border-radius: 30px; padding: 25px; border: 2px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .year-title { font-size: 2rem; font-weight: 800; margin-bottom: 20px; color: var(--yellow); text-align: center; }
+        .year-block { background: var(--card); border-radius: 30px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .year-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; color: var(--yellow); text-align: center; }
         .exams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .exam-box { background: #080b12; border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
-        .exam-name { font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; color: var(--blue); text-transform: uppercase; }
+        .exam-name { font-size: 0.8rem; font-weight: 800; margin-bottom: 10px; color: var(--blue); text-transform: uppercase; }
         .countdown { display: flex; justify-content: center; gap: 5px; }
-        .unit { background: #131924; padding: 5px; border-radius: 8px; min-width: 45px; border: 1px solid rgba(255,255,255,0.1); }
-        .unit span { display: block; font-size: 1.1rem; font-weight: 800; color: #fff; }
-        .unit label { font-size: 0.5rem; color: #666; text-transform: uppercase; }
+        .unit { background: #131924; padding: 5px; border-radius: 8px; min-width: 40px; border: 1px solid rgba(255,255,255,0.1); }
+        .unit span { display: block; font-size: 1rem; font-weight: 800; color: #fff; }
+        .unit label { font-size: 0.45rem; color: #666; }
+
+        /* SYMMETRIC GRID */
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .col-title { font-size: 2rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: #fff; }
 
         /* SUBJECT CARDS */
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .col-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
-        .subject-card {
-            background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px;
-            padding: 25px; margin-bottom: 30px; position: relative;
-        }
+        .subject-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; padding: 25px; margin-bottom: 30px; }
         .subject-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .sub-info h3 { font-size: 1.6rem; font-weight: 800; color: #fff; }
+        .sub-info h3 { font-size: 1.5rem; font-weight: 800; color: #fff; }
 
-        /* PROGRESS CIRCLE LOGIC */
-        .progress-circle { width: 75px; height: 75px; position: relative; }
+        /* PROGRESS CIRCLE */
+        .progress-circle { width: 70px; height: 70px; position: relative; }
         .progress-circle svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .progress-circle circle { fill: none; stroke-width: 6; stroke-linecap: round; }
         .progress-circle .bg { stroke: #1a202c; }
-        .progress-circle .fg { stroke: var(--pink); transition: stroke-dashoffset 1s ease; filter: drop-shadow(0 0 5px var(--pink)); }
-        .percent { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; font-size: 0.9rem; font-weight: 800; color: #fff; }
+        .progress-circle .fg { stroke: var(--pink); transition: stroke-dashoffset 0.8s ease; filter: drop-shadow(0 0 5px var(--pink)); }
+        .percent { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; font-size: 0.85rem; font-weight: 800; }
 
-        /* CHAPTER LIST */
-        .ch-item { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 14px 18px; background: rgba(255,255,255,0.03); border-radius: 12px; font-size: 0.95rem; font-weight: 600; margin-bottom: 10px; border: 1px solid transparent;
-        }
-        .ch-item:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
-        .weight { font-size: 0.75rem; color: var(--yellow); font-weight: 400; margin-left: 8px; }
-        .check { 
-            width: 32px; height: 32px; border-radius: 10px; border: 2px solid #333; 
-            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;
-        }
-        .check.done { background: var(--green); border-color: var(--green); color: #000; box-shadow: 0 0 15px var(--green); }
+        /* CHAPTERS */
+        .ch-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: rgba(255,255,255,0.03); border-radius: 12px; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; }
+        .weight { font-size: 0.7rem; color: var(--yellow); font-weight: 400; margin-left: 5px; }
+        .check { width: 28px; height: 28px; border-radius: 8px; border: 2px solid #333; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .check.done { background: var(--green); border-color: var(--green); color: #000; box-shadow: 0 0 10px var(--green); }
 
-        /* ANALYTICS POPUP (As per Screenshot) */
-        .ana-btn { position: fixed; right: 30px; bottom: 30px; width: 70px; height: 70px; border-radius: 22px; background: linear-gradient(45deg, var(--pink), var(--blue)); display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; box-shadow: 0 10px 25px rgba(255, 0, 122, 0.4); font-size: 1.8rem; }
-        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(10px); }
-        .popup-box { width: min(1000px, 95%); background: #080b11; border-radius: 35px; padding: 40px; border: 2px solid #1a202c; position: relative; box-shadow: 0 0 50px rgba(0,0,0,1); }
-        .close-pop { position: absolute; top: 20px; right: 20px; background: #ff0033; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; border: 3px solid #080b11; box-shadow: 0 0 15px #ff0033; }
-        
-        .ana-content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .ana-inner { border: 2px solid transparent; border-radius: 25px; padding: 30px; text-align: center; background: rgba(255,255,255,0.02); }
-        .jee-side { border-color: var(--blue); box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.05); }
-        .neet-side { border-color: var(--pink); box-shadow: inset 0 0 20px rgba(255, 0, 122, 0.05); }
-        
-        .prog-group { display: flex; justify-content: center; gap: 25px; margin-top: 20px; }
-        .mini-card { text-align: center; }
-        .label-text { font-size: 0.7rem; color: #999; margin-top: 8px; font-weight: 700; text-transform: uppercase; }
+        /* POPUP */
+        .ana-btn { position: fixed; right: 30px; bottom: 30px; width: 65px; height: 65px; border-radius: 20px; background: linear-gradient(45deg, var(--pink), var(--blue)); display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; box-shadow: 0 10px 20px rgba(0,0,0,0.5); font-size: 1.5rem; }
+        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .popup-box { width: min(1000px, 95%); background: #080b11; border-radius: 35px; padding: 40px; border: 2px solid #1a202c; position: relative; }
+        .close-pop { position: absolute; top: 20px; right: 20px; background: #ff0033; width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .ana-content { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .ana-inner { border-radius: 20px; padding: 20px; text-align: center; background: rgba(255,255,255,0.02); border: 1.5px solid; }
+        .prog-row { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .mini-c { text-align: center; width: 60px; }
 
         @media (max-width: 900px) { .timer-container, .main-grid, .ana-content { grid-template-columns: 1fr; } }
     </style>
@@ -94,13 +72,11 @@
 
 <canvas id="snow"></canvas>
 <div class="container">
-    <header class="header">
-        <div class="brand"><h1>Ghazi Abbas ✔️</h1></div>
-    </header>
+    <header class="header"><div class="brand"><h1>Ghazi Abbas ✔️</h1></div></header>
 
     <div class="timer-container">
         <div class="year-block">
-            <div class="year-title">MISSION 2027</div>
+            <div class="year-title">TARGET 2027</div>
             <div class="exams-grid">
                 <div class="exam-box"><div class="exam-name">JEE Main Jan</div><div class="countdown" id="t1"></div></div>
                 <div class="exam-box"><div class="exam-name">JEE Main Apr</div><div class="countdown" id="t2"></div></div>
@@ -109,7 +85,7 @@
             </div>
         </div>
         <div class="year-block">
-            <div class="year-title">MISSION 2028</div>
+            <div class="year-title">TARGET 2028</div>
             <div class="exams-grid">
                 <div class="exam-box"><div class="exam-name">JEE Main Jan</div><div class="countdown" id="t5"></div></div>
                 <div class="exam-box"><div class="exam-name">JEE Main Apr</div><div class="countdown" id="t6"></div></div>
@@ -120,13 +96,9 @@
     </div>
 
     <div class="main-grid">
-        <div id="col11"><h2 class="col-title">11th Syllabus</h2><div id="data11"></div></div>
-        <div id="col12"><h2 class="col-title">12th Syllabus</h2><div id="data12"></div></div>
+        <div id="col11"><h2 class="col-title">Class 11th</h2><div id="data11"></div></div>
+        <div id="col12"><h2 class="col-title">Class 12th</h2><div id="data12"></div></div>
     </div>
-
-    <footer style="text-align:center; padding: 80px 0;">
-        <a href="https://t.me/ghazi_abbas" style="color:var(--blue); font-weight:800; text-decoration:none; font-size: 1.1rem;">TELEGRAM: @GHAZI_ABBAS</a>
-    </footer>
 </div>
 
 <div class="ana-btn" onclick="openAna()">📊</div>
@@ -135,36 +107,42 @@
     <div class="popup-box">
         <div class="close-pop" onclick="closeAna()">✕</div>
         <div class="ana-content">
-            <div class="ana-inner jee-side">
-                <h2 style="color:var(--blue); margin-bottom:15px;">JEE ANALYTICS</h2>
-                <p style="color:var(--yellow); font-size:0.8rem; font-weight:700;">11th Progress</p>
-                <div class="prog-group" id="j11"></div>
-                <p style="color:var(--yellow); font-size:0.8rem; font-weight:700; margin-top:25px;">12th Progress</p>
-                <div class="prog-group" id="j12"></div>
+            <div class="ana-inner" style="border-color:var(--blue)">
+                <h3 style="color:var(--blue)">JEE ANALYTICS</h3>
+                <p style="color:var(--yellow); font-size:0.7rem; margin-top:10px;">11th Progress</p>
+                <div class="prog-row" id="j11"></div>
+                <p style="color:var(--yellow); font-size:0.7rem; margin-top:15px;">12th Progress</p>
+                <div class="prog-row" id="j12"></div>
             </div>
-            <div class="ana-inner neet-side">
-                <h2 style="color:var(--pink); margin-bottom:15px;">NEET ANALYTICS</h2>
-                <p style="color:var(--yellow); font-size:0.8rem; font-weight:700;">11th Progress</p>
-                <div class="prog-group" id="n11"></div>
-                <p style="color:var(--yellow); font-size:0.8rem; font-weight:700; margin-top:25px;">12th Progress</p>
-                <div class="prog-group" id="n12"></div>
+            <div class="ana-inner" style="border-color:var(--pink)">
+                <h3 style="color:var(--pink)">NEET ANALYTICS</h3>
+                <p style="color:var(--yellow); font-size:0.7rem; margin-top:10px;">11th Progress</p>
+                <div class="prog-row" id="n11"></div>
+                <p style="color:var(--yellow); font-size:0.7rem; margin-top:15px;">12th Progress</p>
+                <div class="prog-row" id="n12"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-// Weightage Data (approx Q = Questions in Exam)
+// PARALLEL SUBJECT LIST (11th & 12th)
 const DB = [
-    { cls:'11th', sub:'Physics', ch:[{n:'Unit & Dimension',w:'1Q'},{n:'Vectors & Kinematics',w:'3Q'},{n:'Laws of Motion',w:'2Q'},{n:'WPE & Circular',w:'2Q'},{n:'Rotational Motion',w:'3Q'},{n:'Thermodynamics',w:'3Q'},{n:'Waves & SHM',w:'3Q'}] },
-    { cls:'11th', sub:'Maths', ch:[{n:'Quadratic Eq.',w:'1Q'},{n:'Sequence & Series',w:'2Q'},{n:'Trigonometry',w:'2Q'},{n:'Straight Lines',w:'2Q'},{n:'Circles',w:'1Q'},{n:'P & C',w:'2Q'},{n:'Binomial',w:'1Q'}] },
-    { cls:'11th', sub:'Biology', ch:[{n:'Cell Structure',w:'5Q'},{n:'Plant Physiology',w:'8Q'},{n:'Human Physiology',w:'12Q'},{n:'Animal Kingdom',w:'4Q'},{n:'Biomolecules',w:'3Q'}] },
-    { cls:'11th', sub:'Chem', ch:[{n:'Mole Concept',w:'1Q'},{n:'Atomic Structure',w:'2Q'},{n:'Chemical Bonding',w:'2Q'},{n:'GOC',w:'3Q'},{n:'Hydrocarbons',w:'3Q'}] },
+    // PHYSICS
+    { cls:'11th', sub:'Physics', ch:[{n:'Unit & Dimension',w:'1Q'},{n:'Vectors',w:'1Q'},{n:'Kinematics',w:'2Q'},{n:'NLM',w:'2Q'},{n:'Work Power Energy',w:'2Q'},{n:'Circular Motion',w:'1Q'},{n:'COM & Collision',w:'2Q'},{n:'Rotational Motion',w:'3Q'},{n:'Gravitation',w:'2Q'},{n:'Solids & Fluids',w:'2Q'},{n:'Thermodynamics',w:'3Q'},{n:'KTG',w:'1Q'},{n:'SHM',w:'2Q'},{n:'Waves',w:'2Q'}] },
+    { cls:'12th', sub:'Physics', ch:[{n:'Electrostatics',w:'3Q'},{n:'Capacitance',w:'1Q'},{n:'Current Electricity',w:'3Q'},{n:'Magnetism',w:'2Q'},{n:'EMI',w:'2Q'},{n:'Alternating Current',w:'2Q'},{n:'EM Waves',w:'1Q'},{n:'Ray Optics',w:'3Q'},{n:'Wave Optics',w:'2Q'},{n:'Modern Physics',w:'5Q'},{n:'Semiconductors',w:'2Q'}] },
     
-    { cls:'12th', sub:'Physics', ch:[{n:'Electrostatics',w:'3Q'},{n:'Current Electricity',w:'3Q'},{n:'Ray Optics',w:'3Q'},{n:'Modern Physics',w:'5Q'},{n:'Semiconductors',w:'2Q'}] },
-    { cls:'12th', sub:'Maths', ch:[{n:'Matrices & Det',w:'2Q'},{n:'Calculus (Diff)',w:'4Q'},{n:'Calculus (Int)',w:'4Q'},{n:'Vectors & 3D',w:'4Q'},{n:'Probability',w:'2Q'}] },
-    { cls:'12th', sub:'Biology', ch:[{n:'Genetics & Evol',w:'15Q'},{n:'Biotech',w:'6Q'},{n:'Reproduction',w:'8Q'},{n:'Ecology',w:'10Q'}] },
-    { cls:'12th', sub:'Chem', ch:[{n:'Solutions',w:'1Q'},{n:'Electrochemistry',w:'2Q'},{n:'Coordination',w:'3Q'},{n:'Aldehyde/Ketones',w:'3Q'},{n:'Biomolecules',w:'2Q'}] }
+    // CHEMISTRY
+    { cls:'11th', sub:'Chemistry', ch:[{n:'Mole Concept',w:'1Q'},{n:'Atomic Structure',w:'2Q'},{n:'Periodic Table',w:'1Q'},{n:'Chemical Bonding',w:'3Q'},{n:'Thermodynamics',w:'2Q'},{n:'Equilibrium',w:'3Q'},{n:'Redox',w:'1Q'},{n:'GOC',w:'3Q'},{n:'Hydrocarbons',w:'3Q'}] },
+    { cls:'12th', sub:'Chemistry', ch:[{n:'Solutions',w:'2Q'},{n:'Electrochemistry',w:'2Q'},{n:'Chemical Kinetics',w:'2Q'},{n:'D & F Block',w:'2Q'},{n:'Coordination Comp.',w:'3Q'},{n:'Haloalkanes',w:'2Q'},{n:'Alcohol/Phenol',w:'2Q'},{n:'Aldehyde/Ketone',w:'3Q'},{n:'Amines',w:'2Q'},{n:'Biomolecules',w:'2Q'}] },
+
+    // MATHS
+    { cls:'11th', sub:'Maths', ch:[{n:'Quadratic Eq.',w:'1Q'},{n:'Sequence & Series',w:'2Q'},{n:'Trigonometry',w:'2Q'},{n:'P & C',w:'2Q'},{n:'Binomial',w:'1Q'},{n:'Straight Lines',w:'2Q'},{n:'Circles',w:'1Q'},{n:'Conic Sections',w:'3Q'},{n:'Sets & Relations',w:'1Q'}] },
+    { cls:'12th', sub:'Maths', ch:[{n:'Function & ITF',w:'2Q'},{n:'Matrices & Det',w:'2Q'},{n:'LCD',w:'3Q'},{n:'Differentiation',w:'1Q'},{n:'AOD',w:'3Q'},{n:'Integration',w:'4Q'},{n:'Area & Diff Eq.',w:'2Q'},{n:'Vector & 3D',w:'4Q'},{n:'Probability',w:'2Q'}] },
+
+    // BIOLOGY
+    { cls:'11th', sub:'Biology', ch:[{n:'Living World',w:'1Q'},{n:'Classification',w:'3Q'},{n:'Plant Kingdom',w:'4Q'},{n:'Animal Kingdom',w:'4Q'},{n:'Morphology',w:'4Q'},{n:'Anatomy',w:'3Q'},{n:'Cell Structure',w:'5Q'},{n:'Biomolecules',w:'3Q'},{n:'Plant Physiology',w:'8Q'},{n:'Human Physiology',w:'12Q'}] },
+    { cls:'12th', sub:'Biology', ch:[{n:'Reproduction',w:'8Q'},{n:'Genetics',w:'12Q'},{n:'Evolution',w:'3Q'},{n:'Human Health',w:'3Q'},{n:'Biotechnology',w:'6Q'},{n:'Ecology',w:'10Q'}] }
 ];
 
 function render() {
@@ -174,67 +152,78 @@ function render() {
         let d = 0; item.ch.forEach((_, i) => { if(localStorage.getItem(item.cls+item.sub+i)) d++; });
         let p = Math.round((d/item.ch.length)*100);
         const card = document.createElement('div'); card.className = 'subject-card';
-        card.innerHTML = `
-            <div class="subject-head">
-                <div class="sub-info"><h3>${item.sub}</h3></div>
-                <div class="progress-circle">
-                    <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35"/><circle class="fg" cx="40" cy="40" r="35" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}"/></svg>
-                    <div class="percent">${p}%</div>
-                </div>
+        card.innerHTML = `<div class="subject-head">
+            <div class="sub-info"><h3>${item.sub}</h3></div>
+            <div class="progress-circle">
+                <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35"/><circle class="fg" cx="40" cy="40" r="35" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}"/></svg>
+                <div class="percent">${p}%</div>
             </div>
-            <div class="ch-list">${item.ch.map((c, i) => {
-                let k = item.cls+item.sub+i; let isD = localStorage.getItem(k);
-                return `<div class="ch-item"><span>${c.n} <span class="weight">(${c.w})</span></span><div class="check ${isD?'done':''}" onclick="tk('${k}')">${isD?'✓':''}</div></div>`
-            }).join('')}</div>`;
+        </div>
+        <div class="ch-list">${item.ch.map((c, i) => {
+            let k = item.cls+item.sub+i; let isD = localStorage.getItem(k);
+            return `<div class="ch-item"><span>${c.n}<span class="weight">(${c.w})</span></span><div class="check ${isD?'done':''}" onclick="tk('${k}')">${isD?'✓':''}</div></div>`
+        }).join('')}</div>`;
         (item.cls==='11th') ? c11.appendChild(card) : c12.appendChild(card);
     });
 }
-function tk(k){ localStorage.getItem(k)?localStorage.removeItem(k):localStorage.setItem(k,'1'); render(); }
 
-/* TIMER DATES */
+function tk(k){ 
+    if(!localStorage.getItem(k)){
+        localStorage.setItem(k,'1');
+        celebrate(); // 3 Second Celebration
+    } else {
+        localStorage.removeItem(k);
+    }
+    render(); 
+}
+
+function celebrate() {
+    let end = Date.now() + (3 * 1000);
+    let colors = ['#ff007a', '#00d2ff', '#00ff88', '#ffcc00'];
+    (function frame() {
+        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+        if (Date.now() < end) { requestAnimationFrame(frame); }
+    }());
+}
+
 function setT(id, date) {
     const target = new Date(date).getTime();
     setInterval(() => {
         const diff = target - Date.now();
         const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-        document.getElementById(id).innerHTML = `<div class="unit"><span>${d}</span><label>Days</label></div><div class="unit"><span>${h}</span><label>Hrs</label></div><div class="unit"><span>${m}</span><label>Min</label></div><div class="unit"><span>${s}</span><label>Sec</label></div>`;
+        document.getElementById(id).innerHTML = `<div class="unit"><span>${d}</span><label>D</label></div><div class="unit"><span>${h}</span><label>H</label></div><div class="unit"><span>${m}</span><label>M</label></div><div class="unit"><span>${s}</span><label>S</label></div>`;
     }, 1000);
 }
+
 setT('t1','Jan 24, 2027'); setT('t2','Apr 06, 2027'); setT('t3','May 23, 2027'); setT('t4','May 02, 2027');
 setT('t5','Jan 24, 2028'); setT('t6','Apr 06, 2028'); setT('t7','May 23, 2028'); setT('t8','May 07, 2028');
 
-/* DYNAMIC CIRCLES FOR ANALYTICS */
 function openAna(){
     document.getElementById('pop').style.display='flex';
     const getP = (c, sub) => {
-        let item = DB.find(x => x.cls === c && x.sub === sub);
-        if(!item) return 0;
-        let d = 0; item.ch.forEach((_,i) => { if(localStorage.getItem(c+sub+i)) d++; });
-        return Math.round((d/item.ch.length)*100);
+        let itm = DB.find(x => x.cls === c && x.sub === sub);
+        let d = 0; itm.ch.forEach((_,i) => { if(localStorage.getItem(c+sub+i)) d++; });
+        return Math.round((d/itm.ch.length)*100);
     };
-    const ring = (p, l, color) => `
-        <div class="mini-card">
-            <div class="progress-circle" style="width:70px; height:70px; margin:auto;">
-                <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35" stroke-width="8"/><circle cx="40" cy="40" r="35" stroke="${color}" stroke-width="8" fill="none" stroke-linecap="round" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}; transition:1s;"/></svg>
-                <div class="percent" style="font-size:0.75rem;">${p}%</div>
-            </div>
-            <div class="label-text">${l}</div>
-        </div>`;
+    const ring = (p, l, color) => `<div class="mini-c">
+        <div class="progress-circle" style="width:55px; height:55px; margin:auto;">
+            <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35" stroke-width="8"/><circle cx="40" cy="40" r="35" stroke="${color}" stroke-width="8" fill="none" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}; transition:1s;"/></svg>
+            <div class="percent" style="font-size:0.7rem;">${p}%</div>
+        </div><div style="font-size:0.5rem; margin-top:5px; font-weight:700;">${l}</div></div>`;
     
-    document.getElementById('j11').innerHTML = ring(getP('11th','Maths'),'Maths','#00d2ff') + ring(getP('11th','Physics'),'Physics','#00d2ff') + ring(getP('11th','Chem'),'Chem','#00d2ff');
-    document.getElementById('j12').innerHTML = ring(getP('12th','Maths'),'Maths','#00d2ff') + ring(getP('12th','Physics'),'Physics','#00d2ff') + ring(getP('12th','Chem'),'Chem','#00d2ff');
-    document.getElementById('n11').innerHTML = ring(getP('11th','Biology'),'Bio','#ff007a') + ring(getP('11th','Physics'),'Physics','#ff007a') + ring(getP('11th','Chem'),'Chem','#ff007a');
-    document.getElementById('n12').innerHTML = ring(getP('12th','Biology'),'Bio','#ff007a') + ring(getP('12th','Physics'),'Physics','#ff007a') + ring(getP('12th','Chem'),'Chem','#ff007a');
+    document.getElementById('j11').innerHTML = ring(getP('11th','Maths'),'Maths','#00d2ff')+ring(getP('11th','Physics'),'Physics','#00d2ff')+ring(getP('11th','Chemistry'),'Chem','#00d2ff');
+    document.getElementById('j12').innerHTML = ring(getP('12th','Maths'),'Maths','#00d2ff')+ring(getP('12th','Physics'),'Physics','#00d2ff')+ring(getP('12th','Chemistry'),'Chem','#00d2ff');
+    document.getElementById('n11').innerHTML = ring(getP('11th','Biology'),'Bio','#ff007a')+ring(getP('11th','Physics'),'Physics','#ff007a')+ring(getP('11th','Chemistry'),'Chem','#ff007a');
+    document.getElementById('n12').innerHTML = ring(getP('12th','Biology'),'Bio','#ff007a')+ring(getP('12th','Physics'),'Physics','#ff007a')+ring(getP('12th','Chemistry'),'Chem','#ff007a');
 }
 function closeAna(){ document.getElementById('pop').style.display='none'; }
 
-/* SNOW EFFECT */
 const cvs = document.getElementById('snow'); const ctx = cvs.getContext('2d');
 let pts = []; function res(){ cvs.width=window.innerWidth; cvs.height=window.innerHeight; } window.onresize=res; res();
 class P { constructor(){this.r();} r(){this.x=Math.random()*cvs.width;this.y=Math.random()*cvs.height;this.v=0.4+Math.random();this.s=1+Math.random()*2;} u(){this.y+=this.v;if(this.y>cvs.height)this.y=-10;} d(){ctx.fillStyle='rgba(255,255,255,0.3)';ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,Math.PI*2);ctx.fill();}}
-for(let i=0;i<60;i++) pts.push(new P());
+for(let i=0;i<50;i++) pts.push(new P());
 function ani(){ ctx.clearRect(0,0,cvs.width,cvs.height); pts.forEach(p=>{p.u();p.d();}); requestAnimationFrame(ani); } ani();
-
 render();
 </script>
 </body>
