@@ -21,6 +21,7 @@
         #snow { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
         .container { width: min(1500px, 96%); margin: auto; padding-bottom: 150px; }
 
+        /* HEADER GLOW */
         .header { padding: 60px 0 40px; text-align: center; }
         .brand h1 { 
             font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; 
@@ -28,59 +29,64 @@
             letter-spacing: -2px;
         }
 
-        /* TIMER BOXES */
+        /* TIMER GRID */
         .timer-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
-        .year-block { background: var(--card); border-radius: 30px; padding: 25px; border: 2px solid rgba(0, 210, 255, 0.3); box-shadow: 0 0 15px rgba(0, 210, 255, 0.1); }
-        .year-title { font-size: 2rem; font-weight: 800; margin-bottom: 20px; color: var(--yellow); text-shadow: 0 0 10px var(--yellow); }
+        .year-block { background: var(--card); border-radius: 30px; padding: 25px; border: 2px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .year-title { font-size: 2rem; font-weight: 800; margin-bottom: 20px; color: var(--yellow); text-align: center; }
         .exams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .exam-box { background: #080b12; border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .exam-name { font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; color: var(--blue); }
+        .exam-box { background: #080b12; border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .exam-name { font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; color: var(--blue); text-transform: uppercase; }
         .countdown { display: flex; justify-content: center; gap: 5px; }
-        .unit { background: #131924; padding: 5px; border-radius: 8px; min-width: 40px; border: 1px solid rgba(255,255,255,0.1); }
-        .unit span { display: block; font-size: 1rem; font-weight: 800; color: #fff; }
-        .unit label { font-size: 0.5rem; color: #777; }
+        .unit { background: #131924; padding: 5px; border-radius: 8px; min-width: 45px; border: 1px solid rgba(255,255,255,0.1); }
+        .unit span { display: block; font-size: 1.1rem; font-weight: 800; color: #fff; }
+        .unit label { font-size: 0.5rem; color: #666; text-transform: uppercase; }
 
         /* SUBJECT CARDS */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .col-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: #fff; }
+        .col-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.2); }
         .subject-card {
             background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px;
-            padding: 25px; margin-bottom: 30px; position: relative; transition: 0.3s;
+            padding: 25px; margin-bottom: 30px; position: relative;
         }
-        .subject-card:hover { border-color: var(--pink); box-shadow: 0 0 20px rgba(255, 0, 122, 0.2); }
         .subject-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .sub-info h3 { font-size: 1.6rem; font-weight: 800; color: #fff; }
-        
-        .progress-circle { width: 70px; height: 70px; position: relative; }
+
+        /* PROGRESS CIRCLE LOGIC */
+        .progress-circle { width: 75px; height: 75px; position: relative; }
         .progress-circle svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .progress-circle circle { fill: none; stroke-width: 6; stroke-linecap: round; }
         .progress-circle .bg { stroke: #1a202c; }
-        .progress-circle .fg { stroke: var(--pink); transition: 1s ease; filter: drop-shadow(0 0 5px var(--pink)); }
-        .percent { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; font-size: 0.9rem; font-weight: 800; }
+        .progress-circle .fg { stroke: var(--pink); transition: stroke-dashoffset 1s ease; filter: drop-shadow(0 0 5px var(--pink)); }
+        .percent { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; font-size: 0.9rem; font-weight: 800; color: #fff; }
 
+        /* CHAPTER LIST */
         .ch-item { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 12px 15px; background: rgba(255,255,255,0.03); border-radius: 12px; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px;
+            padding: 14px 18px; background: rgba(255,255,255,0.03); border-radius: 12px; font-size: 0.95rem; font-weight: 600; margin-bottom: 10px; border: 1px solid transparent;
         }
-        .weightage { font-size: 0.7rem; color: var(--yellow); margin-left: 10px; font-weight: 400; }
+        .ch-item:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
+        .weight { font-size: 0.75rem; color: var(--yellow); font-weight: 400; margin-left: 8px; }
         .check { 
-            width: 30px; height: 30px; border-radius: 8px; border: 2px solid #444; 
+            width: 32px; height: 32px; border-radius: 10px; border: 2px solid #333; 
             cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;
         }
         .check.done { background: var(--green); border-color: var(--green); color: #000; box-shadow: 0 0 15px var(--green); }
 
-        /* ANALYTICS POPUP */
-        .ana-btn { position: fixed; right: 30px; bottom: 30px; width: 70px; height: 70px; border-radius: 20px; background: linear-gradient(45deg, var(--pink), var(--blue)); display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; box-shadow: 0 0 20px var(--pink); font-size: 1.5rem; }
-        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .popup-box { width: min(900px, 95%); background: #080b11; border-radius: 35px; padding: 40px; border: 2px solid var(--blue); box-shadow: 0 0 40px rgba(0, 210, 255, 0.2); }
-        .ana-content { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        .ana-inner { background: rgba(255,255,255,0.02); border-radius: 25px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        /* ANALYTICS POPUP (As per Screenshot) */
+        .ana-btn { position: fixed; right: 30px; bottom: 30px; width: 70px; height: 70px; border-radius: 22px; background: linear-gradient(45deg, var(--pink), var(--blue)); display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; box-shadow: 0 10px 25px rgba(255, 0, 122, 0.4); font-size: 1.8rem; }
+        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(10px); }
+        .popup-box { width: min(1000px, 95%); background: #080b11; border-radius: 35px; padding: 40px; border: 2px solid #1a202c; position: relative; box-shadow: 0 0 50px rgba(0,0,0,1); }
+        .close-pop { position: absolute; top: 20px; right: 20px; background: #ff0033; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; border: 3px solid #080b11; box-shadow: 0 0 15px #ff0033; }
         
-        .mini-ring { width: 80px; height: 80px; margin: auto; position: relative; }
-        .mini-ring .label-text { font-size: 0.7rem; font-weight: 700; color: #fff; margin-top: 10px; display: block; }
+        .ana-content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .ana-inner { border: 2px solid transparent; border-radius: 25px; padding: 30px; text-align: center; background: rgba(255,255,255,0.02); }
+        .jee-side { border-color: var(--blue); box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.05); }
+        .neet-side { border-color: var(--pink); box-shadow: inset 0 0 20px rgba(255, 0, 122, 0.05); }
+        
+        .prog-group { display: flex; justify-content: center; gap: 25px; margin-top: 20px; }
+        .mini-card { text-align: center; }
+        .label-text { font-size: 0.7rem; color: #999; margin-top: 8px; font-weight: 700; text-transform: uppercase; }
 
-        #disclaimer { position: fixed; bottom: 0; width: 100%; background: #f00; color: #fff; padding: 10px 0; font-weight: 800; z-index: 999; }
-        
         @media (max-width: 900px) { .timer-container, .main-grid, .ana-content { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -89,12 +95,12 @@
 <canvas id="snow"></canvas>
 <div class="container">
     <header class="header">
-        <div class="brand"><h1>Ghazi Abbas 👑</h1></div>
+        <div class="brand"><h1>Ghazi Abbas ✔️</h1></div>
     </header>
 
     <div class="timer-container">
         <div class="year-block">
-            <div class="year-title">TARGET 2027</div>
+            <div class="year-title">MISSION 2027</div>
             <div class="exams-grid">
                 <div class="exam-box"><div class="exam-name">JEE Main Jan</div><div class="countdown" id="t1"></div></div>
                 <div class="exam-box"><div class="exam-name">JEE Main Apr</div><div class="countdown" id="t2"></div></div>
@@ -103,7 +109,7 @@
             </div>
         </div>
         <div class="year-block">
-            <div class="year-title">TARGET 2028</div>
+            <div class="year-title">MISSION 2028</div>
             <div class="exams-grid">
                 <div class="exam-box"><div class="exam-name">JEE Main Jan</div><div class="countdown" id="t5"></div></div>
                 <div class="exam-box"><div class="exam-name">JEE Main Apr</div><div class="countdown" id="t6"></div></div>
@@ -114,12 +120,12 @@
     </div>
 
     <div class="main-grid">
-        <div id="col11"><h2 class="col-title">CLASS 11TH</h2><div id="data11"></div></div>
-        <div id="col12"><h2 class="col-title">CLASS 12TH</h2><div id="data12"></div></div>
+        <div id="col11"><h2 class="col-title">11th Syllabus</h2><div id="data11"></div></div>
+        <div id="col12"><h2 class="col-title">12th Syllabus</h2><div id="data12"></div></div>
     </div>
 
-    <footer style="text-align:center; padding: 100px 0;">
-        <a href="https://t.me/ghazi_abbas" style="color:var(--blue); font-weight:800; text-decoration:none; font-size: 1.2rem; text-shadow: 0 0 10px var(--blue);">JOIN TELEGRAM: @GHAZI_ABBAS</a>
+    <footer style="text-align:center; padding: 80px 0;">
+        <a href="https://t.me/ghazi_abbas" style="color:var(--blue); font-weight:800; text-decoration:none; font-size: 1.1rem;">TELEGRAM: @GHAZI_ABBAS</a>
     </footer>
 </div>
 
@@ -127,56 +133,46 @@
 
 <div class="popup" id="pop">
     <div class="popup-box">
-        <div style="text-align:right; cursor:pointer; font-size:1.5rem;" onclick="closeAna()">✕</div>
+        <div class="close-pop" onclick="closeAna()">✕</div>
         <div class="ana-content">
-            <div class="ana-inner">
-                <h3 style="color:var(--blue); margin-bottom:20px; font-weight:800;">JEE ANALYSIS</h3>
-                <div class="progress-row" id="j_ana" style="display:flex; justify-content:space-around;"></div>
+            <div class="ana-inner jee-side">
+                <h2 style="color:var(--blue); margin-bottom:15px;">JEE ANALYTICS</h2>
+                <p style="color:var(--yellow); font-size:0.8rem; font-weight:700;">11th Progress</p>
+                <div class="prog-group" id="j11"></div>
+                <p style="color:var(--yellow); font-size:0.8rem; font-weight:700; margin-top:25px;">12th Progress</p>
+                <div class="prog-group" id="j12"></div>
             </div>
-            <div class="ana-inner">
-                <h3 style="color:var(--pink); margin-bottom:20px; font-weight:800;">NEET ANALYSIS</h3>
-                <div class="progress-row" id="n_ana" style="display:flex; justify-content:space-around;"></div>
+            <div class="ana-inner neet-side">
+                <h2 style="color:var(--pink); margin-bottom:15px;">NEET ANALYTICS</h2>
+                <p style="color:var(--yellow); font-size:0.8rem; font-weight:700;">11th Progress</p>
+                <div class="prog-group" id="n11"></div>
+                <p style="color:var(--yellow); font-size:0.8rem; font-weight:700; margin-top:25px;">12th Progress</p>
+                <div class="prog-group" id="n12"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-// Weightage added: Q = Questions, % = Weightage
+// Weightage Data (approx Q = Questions in Exam)
 const DB = [
-    { cls:'11th', sub:'Physics', ch:[
-        {n:'Unit & Dimension', w:'2Q'}, {n:'Vectors & Kinematics', w:'3Q'}, {n:'Laws of Motion', w:'2Q'}, {n:'Work Power Energy', w:'2Q'},
-        {n:'Rotational Motion', w:'3Q'}, {n:'Gravitation', w:'2Q'}, {n:'Thermodynamics', w:'3Q'}, {n:'Oscillations & Waves', w:'3Q'}
-    ]},
-    { cls:'11th', sub:'Maths', ch:[
-        {n:'Sets & Functions', w:'5%'}, {n:'Trigonometry', w:'8%'}, {n:'Algebra', w:'15%'}, {n:'Coordinate Geometry', w:'12%'},
-        {n:'Calculus (11th)', w:'6%'}, {n:'Statistics & Prob', w:'8%'}
-    ]},
-    { cls:'11th', sub:'Biology', ch:[
-        {n:'Plant Kingdom', w:'4Q'}, {n:'Animal Kingdom', w:'4Q'}, {n:'Cell Structure', w:'5Q'}, {n:'Human Physiology', w:'12Q'},
-        {n:'Plant Physiology', w:'8Q'}, {n:'Biomolecules', w:'3Q'}
-    ]},
-    { cls:'12th', sub:'Physics', ch:[
-        {n:'Electrostatics', w:'3Q'}, {n:'Current Electricity', w:'3Q'}, {n:'Magnetism', w:'4Q'}, {n:'Optics', w:'4Q'},
-        {n:'Modern Physics', w:'5Q'}, {n:'Semiconductors', w:'2Q'}
-    ]},
-    { cls:'12th', sub:'Maths', ch:[
-        {n:'Calculus (12th)', w:'25%'}, {n:'Vectors & 3D', w:'15%'}, {n:'Matrices & Det', w:'10%'}, {n:'Probability', w:'8%'}
-    ]},
-    { cls:'12th', sub:'Biology', ch:[
-        {n:'Genetics & Evol.', w:'15Q'}, {n:'Reproduction', w:'8Q'}, {n:'Biotech', w:'6Q'}, {n:'Ecology', w:'10Q'},
-        {n:'Human Welfare', w:'5Q'}
-    ]}
+    { cls:'11th', sub:'Physics', ch:[{n:'Unit & Dimension',w:'1Q'},{n:'Vectors & Kinematics',w:'3Q'},{n:'Laws of Motion',w:'2Q'},{n:'WPE & Circular',w:'2Q'},{n:'Rotational Motion',w:'3Q'},{n:'Thermodynamics',w:'3Q'},{n:'Waves & SHM',w:'3Q'}] },
+    { cls:'11th', sub:'Maths', ch:[{n:'Quadratic Eq.',w:'1Q'},{n:'Sequence & Series',w:'2Q'},{n:'Trigonometry',w:'2Q'},{n:'Straight Lines',w:'2Q'},{n:'Circles',w:'1Q'},{n:'P & C',w:'2Q'},{n:'Binomial',w:'1Q'}] },
+    { cls:'11th', sub:'Biology', ch:[{n:'Cell Structure',w:'5Q'},{n:'Plant Physiology',w:'8Q'},{n:'Human Physiology',w:'12Q'},{n:'Animal Kingdom',w:'4Q'},{n:'Biomolecules',w:'3Q'}] },
+    { cls:'11th', sub:'Chem', ch:[{n:'Mole Concept',w:'1Q'},{n:'Atomic Structure',w:'2Q'},{n:'Chemical Bonding',w:'2Q'},{n:'GOC',w:'3Q'},{n:'Hydrocarbons',w:'3Q'}] },
+    
+    { cls:'12th', sub:'Physics', ch:[{n:'Electrostatics',w:'3Q'},{n:'Current Electricity',w:'3Q'},{n:'Ray Optics',w:'3Q'},{n:'Modern Physics',w:'5Q'},{n:'Semiconductors',w:'2Q'}] },
+    { cls:'12th', sub:'Maths', ch:[{n:'Matrices & Det',w:'2Q'},{n:'Calculus (Diff)',w:'4Q'},{n:'Calculus (Int)',w:'4Q'},{n:'Vectors & 3D',w:'4Q'},{n:'Probability',w:'2Q'}] },
+    { cls:'12th', sub:'Biology', ch:[{n:'Genetics & Evol',w:'15Q'},{n:'Biotech',w:'6Q'},{n:'Reproduction',w:'8Q'},{n:'Ecology',w:'10Q'}] },
+    { cls:'12th', sub:'Chem', ch:[{n:'Solutions',w:'1Q'},{n:'Electrochemistry',w:'2Q'},{n:'Coordination',w:'3Q'},{n:'Aldehyde/Ketones',w:'3Q'},{n:'Biomolecules',w:'2Q'}] }
 ];
 
 function render() {
     const c11 = document.getElementById('data11'), c12 = document.getElementById('data12');
     c11.innerHTML = ''; c12.innerHTML = '';
-    
     DB.forEach(item => {
         let d = 0; item.ch.forEach((_, i) => { if(localStorage.getItem(item.cls+item.sub+i)) d++; });
         let p = Math.round((d/item.ch.length)*100);
-        
         const card = document.createElement('div'); card.className = 'subject-card';
         card.innerHTML = `
             <div class="subject-head">
@@ -188,31 +184,26 @@ function render() {
             </div>
             <div class="ch-list">${item.ch.map((c, i) => {
                 let k = item.cls+item.sub+i; let isD = localStorage.getItem(k);
-                return `<div class="ch-item"><span>${c.n}<span class="weightage">(${c.w})</span></span><div class="check ${isD?'done':''}" onclick="tk('${k}')">${isD?'✓':''}</div></div>`
+                return `<div class="ch-item"><span>${c.n} <span class="weight">(${c.w})</span></span><div class="check ${isD?'done':''}" onclick="tk('${k}')">${isD?'✓':''}</div></div>`
             }).join('')}</div>`;
         (item.cls==='11th') ? c11.appendChild(card) : c12.appendChild(card);
     });
 }
-
 function tk(k){ localStorage.getItem(k)?localStorage.removeItem(k):localStorage.setItem(k,'1'); render(); }
 
-/* UPDATED TIMER LOGIC */
+/* TIMER DATES */
 function setT(id, date) {
     const target = new Date(date).getTime();
-    const update = () => {
+    setInterval(() => {
         const diff = target - Date.now();
-        if(diff < 0) { document.getElementById(id).innerHTML = "EXAM DAY!"; return; }
         const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-        document.getElementById(id).innerHTML = `<div class="unit"><span>${d}</span><label>D</label></div><div class="unit"><span>${h}</span><label>H</label></div><div class="unit"><span>${m}</span><label>M</label></div><div class="unit"><span>${s}</span><label>S</label></div>`;
-    };
-    update(); setInterval(update, 1000);
+        document.getElementById(id).innerHTML = `<div class="unit"><span>${d}</span><label>Days</label></div><div class="unit"><span>${h}</span><label>Hrs</label></div><div class="unit"><span>${m}</span><label>Min</label></div><div class="unit"><span>${s}</span><label>Sec</label></div>`;
+    }, 1000);
 }
+setT('t1','Jan 24, 2027'); setT('t2','Apr 06, 2027'); setT('t3','May 23, 2027'); setT('t4','May 02, 2027');
+setT('t5','Jan 24, 2028'); setT('t6','Apr 06, 2028'); setT('t7','May 23, 2028'); setT('t8','May 07, 2028');
 
-// Fixed Dates
-setT('t1','Jan 24, 2027 09:00:00'); setT('t2','Apr 06, 2027 09:00:00'); setT('t3','May 23, 2027 09:00:00'); setT('t4','May 02, 2027 14:00:00');
-setT('t5','Jan 24, 2028 09:00:00'); setT('t6','Apr 06, 2028 09:00:00'); setT('t7','May 23, 2028 09:00:00'); setT('t8','May 07, 2028 14:00:00');
-
-/* ANALYTICS WITH CIRCLES */
+/* DYNAMIC CIRCLES FOR ANALYTICS */
 function openAna(){
     document.getElementById('pop').style.display='flex';
     const getP = (c, sub) => {
@@ -221,27 +212,28 @@ function openAna(){
         let d = 0; item.ch.forEach((_,i) => { if(localStorage.getItem(c+sub+i)) d++; });
         return Math.round((d/item.ch.length)*100);
     };
-
-    const ring = (p, label, color) => `
-        <div class="mini-ring">
-            <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35" stroke-width="8"/><circle cx="40" cy="40" r="35" stroke="${color}" stroke-width="8" fill="none" stroke-linecap="round" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}; transition:1s;"/></svg>
-            <div class="percent" style="font-size:0.8rem;">${p}%</div>
-            <span class="label-text">${label}</span>
+    const ring = (p, l, color) => `
+        <div class="mini-card">
+            <div class="progress-circle" style="width:70px; height:70px; margin:auto;">
+                <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35" stroke-width="8"/><circle cx="40" cy="40" r="35" stroke="${color}" stroke-width="8" fill="none" stroke-linecap="round" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}; transition:1s;"/></svg>
+                <div class="percent" style="font-size:0.75rem;">${p}%</div>
+            </div>
+            <div class="label-text">${l}</div>
         </div>`;
-
-    document.getElementById('j_ana').innerHTML = ring(getP('11th','Maths'),'11th M','#00d2ff') + ring(getP('12th','Maths'),'12th M','#00d2ff');
-    document.getElementById('n_ana').innerHTML = ring(getP('11th','Biology'),'11th B','#ff007a') + ring(getP('12th','Biology'),'12th B','#ff007a');
+    
+    document.getElementById('j11').innerHTML = ring(getP('11th','Maths'),'Maths','#00d2ff') + ring(getP('11th','Physics'),'Physics','#00d2ff') + ring(getP('11th','Chem'),'Chem','#00d2ff');
+    document.getElementById('j12').innerHTML = ring(getP('12th','Maths'),'Maths','#00d2ff') + ring(getP('12th','Physics'),'Physics','#00d2ff') + ring(getP('12th','Chem'),'Chem','#00d2ff');
+    document.getElementById('n11').innerHTML = ring(getP('11th','Biology'),'Bio','#ff007a') + ring(getP('11th','Physics'),'Physics','#ff007a') + ring(getP('11th','Chem'),'Chem','#ff007a');
+    document.getElementById('n12').innerHTML = ring(getP('12th','Biology'),'Bio','#ff007a') + ring(getP('12th','Physics'),'Physics','#ff007a') + ring(getP('12th','Chem'),'Chem','#ff007a');
 }
 function closeAna(){ document.getElementById('pop').style.display='none'; }
 
-/* SNOW */
+/* SNOW EFFECT */
 const cvs = document.getElementById('snow'); const ctx = cvs.getContext('2d');
-let particles = [];
-function res(){ cvs.width=window.innerWidth; cvs.height=window.innerHeight; }
-window.onresize=res; res();
-class P { constructor(){ this.r(); } r(){ this.x=Math.random()*cvs.width; this.y=Math.random()*cvs.height; this.v=0.5+Math.random(); this.s=1+Math.random()*2; } u(){ this.y+=this.v; if(this.y>cvs.height)this.y=-10; } d(){ ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); } }
-for(let i=0;i<50;i++) particles.push(new P());
-function ani(){ ctx.clearRect(0,0,cvs.width,cvs.height); particles.forEach(p=>{p.u();p.d();}); requestAnimationFrame(ani); } ani();
+let pts = []; function res(){ cvs.width=window.innerWidth; cvs.height=window.innerHeight; } window.onresize=res; res();
+class P { constructor(){this.r();} r(){this.x=Math.random()*cvs.width;this.y=Math.random()*cvs.height;this.v=0.4+Math.random();this.s=1+Math.random()*2;} u(){this.y+=this.v;if(this.y>cvs.height)this.y=-10;} d(){ctx.fillStyle='rgba(255,255,255,0.3)';ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,Math.PI*2);ctx.fill();}}
+for(let i=0;i<60;i++) pts.push(new P());
+function ani(){ ctx.clearRect(0,0,cvs.width,cvs.height); pts.forEach(p=>{p.u();p.d();}); requestAnimationFrame(ani); } ani();
 
 render();
 </script>
