@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghazi Abbas | Legend Study Tracker v7.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #03050a; --card: rgba(12, 16, 24, 0.9); --pink: #ff007a; --blue: #00d2ff;
+            --green: #00ff88; --yellow: #ffcc00; --text: #e0e6ed;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+
+        /* REALISTIC RAIN BACKGROUND */
+        #rain { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+        .drop { position: absolute; background: rgba(255, 255, 255, 0.15); width: 1.5px; height: 60px; top: -100px; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(110vh); } }
+
+        .container { width: min(1500px, 96%); margin: auto; padding-bottom: 150px; position: relative; z-index: 1; }
+
+        /* ULTRA GLOW NAME */
+        .header { padding: 60px 0 40px; text-align: center; }
+        .brand { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .brand h1 { 
+            font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; 
+            color: #fff; text-shadow: 0 0 10px #fff, 0 0 20px var(--pink), 0 0 40px var(--pink);
+            letter-spacing: -2px;
+        }
+        .verified { width: 32px; height: 32px; background: #0095f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px #0095f6; }
+        .verified::after { content: '✓'; color: white; font-weight: bold; font-size: 18px; }
+
+        /* TIMERS */
+        .timer-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
+        .year-block { background: var(--card); border-radius: 30px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); text-align: center; backdrop-filter: blur(10px); }
+        .year-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; }
+        .exams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .exam-box { background: rgba(8, 11, 18, 0.8); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); }
+        .exam-name { font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; color: var(--blue); }
+        .countdown { display: flex; justify-content: center; gap: 8px; }
+        .unit { background: #131924; padding: 5px; border-radius: 8px; min-width: 45px; }
+        .unit span { display: block; font-size: 1.1rem; font-weight: 800; }
+        .unit label { font-size: 0.5rem; color: #777; }
+
+        /* MAIN GRID SYMMETRY */
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .col-title { font-size: 2rem; font-weight: 800; margin-bottom: 30px; text-align: center; }
+
+        /* SUBJECT CARDS */
+        .subject-card { background: var(--card); border-radius: 25px; padding: 25px; margin-bottom: 30px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
+        .subject-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .progress-circle { width: 65px; height: 65px; position: relative; }
+        .progress-circle svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .progress-circle circle { fill: none; stroke-width: 6; stroke-linecap: round; }
+        .progress-circle .bg { stroke: #1a202c; }
+        .progress-circle .fg { stroke: var(--pink); transition: 1s ease; }
+        .percent { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: 800; }
+
+        .ch-list { display: grid; gap: 8px; }
+        .ch-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: rgba(255,255,255,0.03); border-radius: 12px; font-size: 0.85rem; }
+        .check { width: 28px; height: 28px; border-radius: 8px; border: 2px solid #333; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .check.done { background: var(--green); border-color: var(--green); color: #000; box-shadow: 0 0 10px var(--green); }
+
+        /* ANALYTICS WITH RUNNING NEON LINE */
+        .ana-btn { position: fixed; right: 30px; bottom: 100px; width: 60px; height: 60px; border-radius: 20px; background: linear-gradient(45deg, var(--pink), var(--blue)); display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; font-size: 24px; }
+        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        
+        .neon-border-wrapper {
+            position: relative; width: min(1000px, 95%); padding: 4px; overflow: hidden; border-radius: 30px;
+        }
+        .neon-border-wrapper::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--blue), var(--pink), transparent 30%);
+            animation: rotateLine 4s linear infinite;
+        }
+        @keyframes rotateLine { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .popup-box { position: relative; background: #080b11; border-radius: 27px; padding: 40px; z-index: 1; }
+        .close-pop { position: absolute; top: 15px; right: 15px; background: #ff0033; width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; border: none; color: white; }
+        
+        .ana-content { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .ana-inner { border: 2px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; text-align: center; }
+        .progress-row { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .mini-ring { width: 65px; height: 65px; border-radius: 50%; border: 4px solid #1a202c; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: 800; background: rgba(255,255,255,0.02); }
+
+        #disclaimer { position: fixed; bottom: -80px; left: 0; width: 100%; background: #f00; color: #fff; padding: 12px 0; z-index: 999; border-top: 4px solid var(--yellow); transition: 0.5s; font-weight: 700; overflow: hidden; }
+        #disclaimer.active { bottom: 0; }
+
+        @media (max-width: 900px) { .timer-container, .main-grid, .ana-content { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div id="rain"></div>
+
+<div class="container">
+    <header class="header">
+        <div class="brand">
+            <h1>Ghazi Abbas</h1>
+            <div class="verified"></div>
+        </div>
+    </header>
+
+    <div class="timer-container">
+        <div class="year-block">
+            <div class="year-title" style="color:var(--yellow)">2027</div>
+            <div class="exams-grid" id="timers27"></div>
+        </div>
+        <div class="year-block">
+            <div class="year-title" style="color:var(--green)">2028</div>
+            <div class="exams-grid" id="timers28"></div>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <div id="col11"><h2 class="col-title">11th Standard</h2><div id="data11"></div></div>
+        <div id="col12"><h2 class="col-title">12th Standard</h2><div id="data12"></div></div>
+    </div>
+
+    <footer style="text-align:center; padding: 100px 0;" id="ft">
+        <a href="https://t.me/ghazi_abbas" target="_blank" style="color:var(--blue); font-weight:800; text-decoration:none; font-size: 1.2rem;">TELEGRAM: @GHAZI_ABBAS</a>
+    </footer>
+</div>
+
+<div id="disclaimer">
+    <marquee scrollamount="10">⚠️ DISCLAIMER: Our website is 100% FREE! If anyone tries to sell you access, beware of scammers! Study with Ghazi Abbas Tracker v7.0 PRO 🚀</marquee>
+</div>
+
+<div class="ana-btn" onclick="openAna()">📊</div>
+
+<div class="popup" id="pop">
+    <div class="neon-border-wrapper">
+        <div class="popup-box">
+            <div class="close-pop" onclick="closeAna()">✕</div>
+            <div class="ana-content">
+                <div class="ana-inner" style="border-color: var(--blue);">
+                    <h2 style="color:var(--blue); margin-bottom:20px;">JEE ANALYTICS</h2>
+                    <p style="color:var(--yellow); font-size:0.8rem;">11th Progress</p>
+                    <div class="progress-row" id="j11"></div>
+                    <p style="color:var(--yellow); font-size:0.8rem; margin-top:20px;">12th Progress</p>
+                    <div class="progress-row" id="j12"></div>
+                </div>
+                <div class="ana-inner" style="border-color: var(--pink);">
+                    <h2 style="color:var(--pink); margin-bottom:20px;">NEET ANALYTICS</h2>
+                    <p style="color:var(--yellow); font-size:0.8rem;">11th Progress</p>
+                    <div class="progress-row" id="n11"></div>
+                    <p style="color:var(--yellow); font-size:0.8rem; margin-top:20px;">12th Progress</p>
+                    <div class="progress-row" id="n12"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const DB = [
+    // 11th Syllabus
+    { cls:'11th', sub:'Maths', ch:['Basic Math','Sets','Trigo Functions','Trigo Equation','Quadratic','Sequence','Relations','P&C','Binomial','Derivatives','Inequalities','Straight Lines','Circles','Parabola','Ellipse','Hyperbola','Probability','3D','Complex Numbers','Statistics','SOT'] },
+    { cls:'11th', sub:'Physics', ch:['Unit & Dimension','Basic Maths','Vectors','Motion 1D','Errors','Motion 2D','NLM','Circular Motion','WPE','COM','Thermal Prop','Elasticity','Rotation','KTG & Thermo','Oscillations','Waves','Fluids','Gravitation'] },
+    { cls:'11th', sub:'Physical Chem', ch:['Mole concept','Structure of atom','State of matter','Thermodynamics','Redox','Chemical equilibrium','Ionic equilibrium'] },
+    { cls:'11th', sub:'Organic Chem', ch:['IUPAC','Isomerism','GOC','Hydrocarbons','Purification','Environmental'] },
+    { cls:'11th', sub:'Inorganic Chem', ch:['Periodic table','Chemical bonding','P-Block','S-Block','Hydrogen'] },
+    { cls:'11th', sub:'Biology', ch:['Cell: Unit of life','Cell Cycle','Living World','Biological Class.','Plant Kingdom','Morphology','Anatomy','Photosynthesis','Plant Respiration','Plant Growth','Structural Org','Breathing','Circulation','Excretion','Locomotion','Neural Control','Chemical Coord','Animal Kingdom','Biomolecules'] },
+
+    // 12th Syllabus
+    { cls:'12th', sub:'Maths', ch:['Determinants','Matrices','Relations & Functions','Inverse Trigo','LCD','MOD','AOD','Indefinite','Definite','AOI','Diff Equation','Vector Algebra','3D Geometry','Probability'] },
+    { cls:'12th', sub:'Physics', ch:['Electric Charges','Electrostatics','Current Electricity','Moving Charges','Magnetism','EMI','AC','EM Waves','Ray Optics','Wave Optics','Dual Nature','Atoms','Nuclei','Semiconductors'] },
+    { cls:'12th', sub:'Physical Chem', ch:['Solutions','Electrochemistry','Chemical kinetics','Surface chemistry'] },
+    { cls:'12th', sub:'Organic Chem', ch:['Optical isomerism','Haloalkanes','Alcohols & Phenols','Aldehydes & Ketones','Amines','Biomolecules','Polymers','Everyday Life'] },
+    { cls:'12th', sub:'Inorganic Chem', ch:['Coordination compounds','P block','D & F block','Salt analysis','Metallurgy'] },
+    { cls:'12th', sub:'Biology', ch:['Sexual reproduction','Inheritance','Molecular Basis','Microbes','Tissue culture','Organisms','Ecosystem','Biodiversity','Human Reproduction','Reproductive Health','Human Health','Biotech: Principles','Biotech: Apps','Evolution'] }
+];
+
+function render() {
+    const c11 = document.getElementById('data11'), c12 = document.getElementById('data12');
+    c11.innerHTML = ''; c12.innerHTML = '';
+    DB.forEach(item => {
+        let d = 0; item.ch.forEach((_, i) => { if(localStorage.getItem(item.cls+item.sub+i)) d++; });
+        let p = Math.round((d/item.ch.length)*100);
+        const card = document.createElement('div'); card.className = 'subject-card';
+        card.innerHTML = `
+            <div class="subject-head">
+                <div class="sub-info"><p style="color:var(--pink); font-size:0.7rem; font-weight:700;">${item.cls.toUpperCase()}</p><h3>${item.sub}</h3></div>
+                <div class="progress-circle">
+                    <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35"/><circle class="fg" cx="40" cy="40" r="35" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}"/></svg>
+                    <div class="percent">${p}%</div>
+                </div>
+            </div>
+            <div class="ch-list">${item.ch.map((name, i) => {
+                let k = item.cls+item.sub+i; let isD = localStorage.getItem(k);
+                return `<div class="ch-item"><span>${name}</span><div class="check ${isD?'done':''}" onclick="tk('${k}')">${isD?'✓':''}</div></div>`
+            }).join('')}</div>`;
+        (item.cls==='11th') ? c11.appendChild(card) : c12.appendChild(card);
+    });
+}
+function tk(k){ localStorage.getItem(k)?localStorage.removeItem(k):localStorage.setItem(k,'1'); render(); }
+
+// RAIN EFFECT
+function createRain() {
+    const rain = document.getElementById('rain');
+    for(let i=0; i<100; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'drop';
+        drop.style.left = Math.random() * 100 + 'vw';
+        drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+        drop.style.animationDelay = Math.random() * 2 + 's';
+        rain.appendChild(drop);
+    }
+}
+createRain();
+
+// TIMER GENERATOR
+function initTimers() {
+    const exams = ['JEE Main 1','JEE Main 2','JEE Advance','NEET UG'];
+    const dates27 = ['2027-01-20','2027-04-05','2027-05-24','2027-05-07'];
+    const dates28 = ['2028-01-20','2028-04-05','2028-05-24','2028-05-07'];
+    
+    const draw = (container, dates) => {
+        const el = document.getElementById(container);
+        exams.forEach((name, i) => {
+            const id = container + i;
+            el.innerHTML += `<div class="exam-box"><div class="exam-name">${name}</div><div class="countdown" id="${id}"></div></div>`;
+            setInterval(() => {
+                const diff = new Date(dates[i]) - new Date();
+                const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+                document.getElementById(id).innerHTML = `<div class="unit"><span>${d}</span><label>D</label></div><div class="unit"><span>${h}</span><label>H</label></div><div class="unit"><span>${m}</span><label>M</label></div><div class="unit"><span>${s}</span><label>S</label></div>`;
+            }, 1000);
+        });
+    }
+    draw('timers27', dates27); draw('timers28', dates28);
+}
+initTimers();
+
+window.onscroll = () => {
+    const bar = document.getElementById('disclaimer');
+    const trig = document.getElementById('ft').getBoundingClientRect();
+    (trig.top < window.innerHeight) ? bar.classList.add('active') : bar.classList.remove('active');
+};
+
+function openAna(){
+    document.getElementById('pop').style.display='flex';
+    const getP = (c, subs) => {
+        let t=0, d=0; DB.filter(x=>x.cls===c && subs.includes(x.sub)).forEach(s=>{ s.ch.forEach((_,i)=>{ t++; if(localStorage.getItem(s.cls+s.sub+i)) d++; }); });
+        return Math.round((d/t)*100)||0;
+    };
+    const ring = (p, l) => `<div style="text-align:center"><div class="mini-ring">${p}%</div><div style="font-size:0.6rem; color:#888; margin-top:5px;">${l}</div></div>`;
+    const chemL = ['Physical Chem','Organic Chem','Inorganic Chem'];
+    
+    document.getElementById('j11').innerHTML = ring(getP('11th',['Maths']),'Maths') + ring(getP('11th',['Physics']),'Physics') + ring(getP('11th',chemL),'Chem');
+    document.getElementById('j12').innerHTML = ring(getP('12th',['Maths']),'Maths') + ring(getP('12th',['Physics']),'Physics') + ring(getP('12th',chemL),'Chem');
+    document.getElementById('n11').innerHTML = ring(getP('11th',['Biology']),'Bio') + ring(getP('11th',['Physics']),'Physics') + ring(getP('11th',chemL),'Chem');
+    document.getElementById('n12').innerHTML = ring(getP('12th',['Biology']),'Bio') + ring(getP('12th',['Physics']),'Physics') + ring(getP('12th',chemL),'Chem');
+}
+function closeAna(){ document.getElementById('pop').style.display='none'; }
+render();
+</script>
+</body>
+</html>
