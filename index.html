@@ -3,156 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghazi Abbas | Legend Study Tracker v9.0</title>
+    <title>Ghazi Abbas | Legend Study Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg: #03050a; --card: rgba(12, 16, 24, 0.9); --pink: #ff007a; --blue: #00d2ff;
-            --green: #00ff88; --yellow: #ffcc00; --text: #e0e6ed; --purple: #9d50bb;
+            --green: #00ff88; --yellow: #ffcc00; --text: #e0e6ed;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        #snow { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
-        .container { width: min(1500px, 96%); margin: auto; padding-bottom: 100px; }
-
-        /* HEADER */
-        .header { padding: 60px 0 40px; text-align: center; }
-        .brand h1 { 
-            font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; color: #fff;
-            text-shadow: 0 0 10px #fff, 0 0 20px var(--pink), 0 0 40px var(--pink);
+        body {
+            font-family: 'Poppins', sans-serif; background: var(--bg);
+            color: var(--text); overflow-x: hidden; min-height: 100vh;
         }
 
-        /* EXACT TIMERS */
-        .timer-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
-        .year-block { background: var(--card); border-radius: 30px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .year-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; text-align: center; color: var(--yellow); }
-        .exams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .exam-box { background: #080b12; border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.03); text-align: center; }
-        .exam-name { font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; color: var(--blue); }
-        .countdown { display: flex; justify-content: center; gap: 5px; }
-        .unit { background: #131924; padding: 5px; border-radius: 8px; min-width: 42px; border: 1px solid rgba(0,210,255,0.2); }
-        .unit span { display: block; font-size: 1rem; font-weight: 800; color: var(--green); }
-        .unit label { font-size: 0.5rem; color: #777; text-transform: uppercase; }
+        #snow { position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+        .container { width: min(1500px, 96%); margin: auto; padding-bottom: 150px; }
 
-        /* MAIN GRID */
+        .header { padding: 60px 0 40px; text-align: center; }
+        .brand h1 { 
+            font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; 
+            color: #fff; text-shadow: 0 0 20px var(--pink), 0 0 40px var(--pink);
+            letter-spacing: -2px;
+        }
+
+        /* TIMER BOXES */
+        .timer-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 50px; }
+        .year-block { background: var(--card); border-radius: 30px; padding: 25px; border: 2px solid rgba(0, 210, 255, 0.3); box-shadow: 0 0 15px rgba(0, 210, 255, 0.1); }
+        .year-title { font-size: 2rem; font-weight: 800; margin-bottom: 20px; color: var(--yellow); text-shadow: 0 0 10px var(--yellow); }
+        .exams-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .exam-box { background: #080b12; border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .exam-name { font-size: 0.85rem; font-weight: 800; margin-bottom: 10px; color: var(--blue); }
+        .countdown { display: flex; justify-content: center; gap: 5px; }
+        .unit { background: #131924; padding: 5px; border-radius: 8px; min-width: 40px; border: 1px solid rgba(255,255,255,0.1); }
+        .unit span { display: block; font-size: 1rem; font-weight: 800; color: #fff; }
+        .unit label { font-size: 0.5rem; color: #777; }
+
+        /* SUBJECT CARDS */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .subject-card { background: var(--card); border-radius: 25px; padding: 25px; margin-bottom: 30px; border-left: 5px solid var(--pink); transition: 0.3s; }
-        .subject-card:hover { transform: scale(1.01); }
+        .col-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: #fff; }
+        .subject-card {
+            background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px;
+            padding: 25px; margin-bottom: 30px; position: relative; transition: 0.3s;
+        }
+        .subject-card:hover { border-color: var(--pink); box-shadow: 0 0 20px rgba(255, 0, 122, 0.2); }
+        .subject-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .sub-info h3 { font-size: 1.6rem; font-weight: 800; color: #fff; }
         
-        .progress-circle { width: 65px; height: 65px; position: relative; }
+        .progress-circle { width: 70px; height: 70px; position: relative; }
         .progress-circle svg { transform: rotate(-90deg); width: 100%; height: 100%; }
         .progress-circle circle { fill: none; stroke-width: 6; stroke-linecap: round; }
         .progress-circle .bg { stroke: #1a202c; }
-        .progress-circle .fg { stroke: var(--green); transition: 1s; }
-        .percent { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: 800; }
+        .progress-circle .fg { stroke: var(--pink); transition: 1s ease; filter: drop-shadow(0 0 5px var(--pink)); }
+        .percent { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; font-size: 0.9rem; font-weight: 800; }
 
-        /* CHAPTER LIST */
-        .ch-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.02); margin-top: 8px; border-radius: 12px; }
-        .check { width: 28px; height: 28px; border-radius: 8px; border: 2px solid #333; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .ch-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 12px 15px; background: rgba(255,255,255,0.03); border-radius: 12px; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px;
+        }
+        .weightage { font-size: 0.7rem; color: var(--yellow); margin-left: 10px; font-weight: 400; }
+        .check { 
+            width: 30px; height: 30px; border-radius: 8px; border: 2px solid #444; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;
+        }
         .check.done { background: var(--green); border-color: var(--green); color: #000; box-shadow: 0 0 15px var(--green); }
 
-        /* ANALYTICS */
-        .ana-btn { position: fixed; right: 30px; bottom: 30px; width: 65px; height: 65px; border-radius: 20px; background: linear-gradient(45deg, var(--pink), var(--purple)); display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; box-shadow: 0 0 20px var(--pink); font-size: 1.5rem; }
-        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .popup-box { width: 100%; max-width: 900px; background: #0c1222; border-radius: 30px; padding: 30px; border: 2px solid #1a202c; position: relative; overflow-y: auto; max-height: 90vh; }
-        .ana-content { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .ana-inner { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .bold-colorful { font-weight: 800; font-size: 1.2rem; margin-bottom: 15px; display: block; }
+        /* ANALYTICS POPUP */
+        .ana-btn { position: fixed; right: 30px; bottom: 30px; width: 70px; height: 70px; border-radius: 20px; background: linear-gradient(45deg, var(--pink), var(--blue)); display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; box-shadow: 0 0 20px var(--pink); font-size: 1.5rem; }
+        .popup { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .popup-box { width: min(900px, 95%); background: #080b11; border-radius: 35px; padding: 40px; border: 2px solid var(--blue); box-shadow: 0 0 40px rgba(0, 210, 255, 0.2); }
+        .ana-content { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .ana-inner { background: rgba(255,255,255,0.02); border-radius: 25px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         
-        /* TELEGRAM ANIMATION */
-        .tg-link { display: inline-block; padding: 15px 40px; background: #229ED9; color: #fff; text-decoration: none; border-radius: 50px; font-weight: 800; margin-top: 40px; box-shadow: 0 0 20px #229ED9; animation: tgMove 2s infinite ease-in-out; }
-        @keyframes tgMove { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); box-shadow: 0 15px 30px #229ED9; } }
+        .mini-ring { width: 80px; height: 80px; margin: auto; position: relative; }
+        .mini-ring .label-text { font-size: 0.7rem; font-weight: 700; color: #fff; margin-top: 10px; display: block; }
 
-        /* GIFT POPUP */
-        #gift-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; justify-content: center; align-items: center; text-align: center; }
-        .gift-box { padding: 50px; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); border-radius: 40px; border: 3px solid var(--yellow); box-shadow: 0 0 50px var(--yellow); }
-        .college-tag { font-size: 2.5rem; font-weight: 900; background: #fff; color: #000; padding: 10px 30px; border-radius: 15px; margin: 20px 0; display: inline-block; }
-
+        #disclaimer { position: fixed; bottom: 0; width: 100%; background: #f00; color: #fff; padding: 10px 0; font-weight: 800; z-index: 999; }
+        
         @media (max-width: 900px) { .timer-container, .main-grid, .ana-content { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <canvas id="snow"></canvas>
-
 <div class="container">
     <header class="header">
-        <div class="brand"><h1>GHAZI ABBAS 👑</h1></div>
+        <div class="brand"><h1>Ghazi Abbas 👑</h1></div>
     </header>
 
     <div class="timer-container">
         <div class="year-block">
-            <div class="year-title">MISSION 2027</div>
+            <div class="year-title">TARGET 2027</div>
             <div class="exams-grid">
                 <div class="exam-box"><div class="exam-name">JEE Main Jan</div><div class="countdown" id="t1"></div></div>
                 <div class="exam-box"><div class="exam-name">JEE Main Apr</div><div class="countdown" id="t2"></div></div>
+                <div class="exam-box"><div class="exam-name">NEET (02 May)</div><div class="countdown" id="t4"></div></div>
                 <div class="exam-box"><div class="exam-name">JEE Advanced</div><div class="countdown" id="t3"></div></div>
-                <div class="exam-box"><div class="exam-name">NEET UG</div><div class="countdown" id="t4"></div></div>
             </div>
         </div>
         <div class="year-block">
-            <div class="year-title">MISSION 2028</div>
+            <div class="year-title">TARGET 2028</div>
             <div class="exams-grid">
                 <div class="exam-box"><div class="exam-name">JEE Main Jan</div><div class="countdown" id="t5"></div></div>
                 <div class="exam-box"><div class="exam-name">JEE Main Apr</div><div class="countdown" id="t6"></div></div>
+                <div class="exam-box"><div class="exam-name">NEET (07 May)</div><div class="countdown" id="t8"></div></div>
                 <div class="exam-box"><div class="exam-name">JEE Advanced</div><div class="countdown" id="t7"></div></div>
-                <div class="exam-box"><div class="exam-name">NEET UG</div><div class="countdown" id="t8"></div></div>
             </div>
         </div>
     </div>
 
     <div class="main-grid">
-        <div id="col11"><h2 style="text-align:center; margin-bottom:20px; color:var(--blue);">CLASS 11TH SYLLABUS</h2><div id="data11"></div></div>
-        <div id="col12"><h2 style="text-align:center; margin-bottom:20px; color:var(--pink);">CLASS 12TH SYLLABUS</h2><div id="data12"></div></div>
+        <div id="col11"><h2 class="col-title">CLASS 11TH</h2><div id="data11"></div></div>
+        <div id="col12"><h2 class="col-title">CLASS 12TH</h2><div id="data12"></div></div>
     </div>
 
-    <div style="text-align: center;">
-        <a href="https://t.me/ghazi_abbas" class="tg-link">TELEGRAM CHANNEL @GHAZI_ABBAS</a>
-    </div>
+    <footer style="text-align:center; padding: 100px 0;">
+        <a href="https://t.me/ghazi_abbas" style="color:var(--blue); font-weight:800; text-decoration:none; font-size: 1.2rem; text-shadow: 0 0 10px var(--blue);">JOIN TELEGRAM: @GHAZI_ABBAS</a>
+    </footer>
 </div>
 
 <div class="ana-btn" onclick="openAna()">📊</div>
 
 <div class="popup" id="pop">
     <div class="popup-box">
-        <div style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:1.5rem;" onclick="closeAna()">✕</div>
+        <div style="text-align:right; cursor:pointer; font-size:1.5rem;" onclick="closeAna()">✕</div>
         <div class="ana-content">
             <div class="ana-inner">
-                <span class="bold-colorful" style="color:var(--blue)">JEE ANALYTICS</span>
-                <div id="jee-p"></div>
+                <h3 style="color:var(--blue); margin-bottom:20px; font-weight:800;">JEE ANALYSIS</h3>
+                <div class="progress-row" id="j_ana" style="display:flex; justify-content:space-around;"></div>
             </div>
             <div class="ana-inner">
-                <span class="bold-colorful" style="color:var(--pink)">NEET ANALYTICS</span>
-                <div id="neet-p"></div>
+                <h3 style="color:var(--pink); margin-bottom:20px; font-weight:800;">NEET ANALYSIS</h3>
+                <div class="progress-row" id="n_ana" style="display:flex; justify-content:space-around;"></div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="gift-modal">
-    <div class="gift-box">
-        <h1 style="color:var(--green); font-size: 3rem;">100% COMPLETE!</h1>
-        <p style="margin:15px 0;">Sapna Sach Hone Wala Hai...</p>
-        <div class="college-tag" id="college-tag">IIT BOMBAY</div>
-        <br>
-        <button onclick="document.getElementById('gift-modal').style.display='none'" style="padding:10px 30px; border-radius:10px; cursor:pointer; font-weight:800;">GO BACK TO STUDY</button>
-    </div>
-</div>
-
 <script>
-// Exact Exam Data with Weightage
+// Weightage added: Q = Questions, % = Weightage
 const DB = [
-    { cls:'11th', sub:'Physics', w:'33%', ch:['Unit & Dimension','Basic Maths','Vectors','Motion 1D','Laws of Motion','Work Power Energy','Rotational','Gravitation','Thermodynamics','Waves'] },
-    { cls:'11th', sub:'Maths', w:'33%', ch:['Sets','Trigonometry','Quadratic','P&C','Binomial','Straight Lines','Circles','Probability'] },
-    { cls:'11th', sub:'Biology', w:'50%', ch:['Cell','Biological Class.','Plant Kingdom','Morphology','Photosynthesis','Digestion','Circulation','Excretion'] },
-    { cls:'12th', sub:'Physics', w:'33%', ch:['Electrostatics','Current','Magnetism','EMI','AC','Optics','Atoms','Semiconductors'] },
-    { cls:'12th', sub:'Maths', w:'33%', ch:['Matrices','Calculus','Integration','3D Geometry','Vectors','Probability'] },
-    { cls:'12th', sub:'Biology', w:'50%', ch:['Reproduction','Genetics','Evolution','Human Health','Biotech','Ecosystem'] },
-    { cls:'11th', sub:'Chemistry', w:'34%', ch:['Mole','Atomic','Periodic','Bonding','Equilibrium','GOC','Hydrocarbons'] },
-    { cls:'12th', sub:'Chemistry', w:'34%', ch:['Solutions','Kinetics','Electrochem','Coordination','Organic','Biomolecules'] }
+    { cls:'11th', sub:'Physics', ch:[
+        {n:'Unit & Dimension', w:'2Q'}, {n:'Vectors & Kinematics', w:'3Q'}, {n:'Laws of Motion', w:'2Q'}, {n:'Work Power Energy', w:'2Q'},
+        {n:'Rotational Motion', w:'3Q'}, {n:'Gravitation', w:'2Q'}, {n:'Thermodynamics', w:'3Q'}, {n:'Oscillations & Waves', w:'3Q'}
+    ]},
+    { cls:'11th', sub:'Maths', ch:[
+        {n:'Sets & Functions', w:'5%'}, {n:'Trigonometry', w:'8%'}, {n:'Algebra', w:'15%'}, {n:'Coordinate Geometry', w:'12%'},
+        {n:'Calculus (11th)', w:'6%'}, {n:'Statistics & Prob', w:'8%'}
+    ]},
+    { cls:'11th', sub:'Biology', ch:[
+        {n:'Plant Kingdom', w:'4Q'}, {n:'Animal Kingdom', w:'4Q'}, {n:'Cell Structure', w:'5Q'}, {n:'Human Physiology', w:'12Q'},
+        {n:'Plant Physiology', w:'8Q'}, {n:'Biomolecules', w:'3Q'}
+    ]},
+    { cls:'12th', sub:'Physics', ch:[
+        {n:'Electrostatics', w:'3Q'}, {n:'Current Electricity', w:'3Q'}, {n:'Magnetism', w:'4Q'}, {n:'Optics', w:'4Q'},
+        {n:'Modern Physics', w:'5Q'}, {n:'Semiconductors', w:'2Q'}
+    ]},
+    { cls:'12th', sub:'Maths', ch:[
+        {n:'Calculus (12th)', w:'25%'}, {n:'Vectors & 3D', w:'15%'}, {n:'Matrices & Det', w:'10%'}, {n:'Probability', w:'8%'}
+    ]},
+    { cls:'12th', sub:'Biology', ch:[
+        {n:'Genetics & Evol.', w:'15Q'}, {n:'Reproduction', w:'8Q'}, {n:'Biotech', w:'6Q'}, {n:'Ecology', w:'10Q'},
+        {n:'Human Welfare', w:'5Q'}
+    ]}
 ];
 
 function render() {
@@ -165,96 +179,69 @@ function render() {
         
         const card = document.createElement('div'); card.className = 'subject-card';
         card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <div><h3>${item.sub}</h3><small style="color:var(--yellow)">Exam Weightage: ${item.w}</small></div>
+            <div class="subject-head">
+                <div class="sub-info"><h3>${item.sub}</h3></div>
                 <div class="progress-circle">
                     <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35"/><circle class="fg" cx="40" cy="40" r="35" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}"/></svg>
                     <div class="percent">${p}%</div>
                 </div>
             </div>
-            <div class="ch-list">${item.ch.map((name, i) => {
+            <div class="ch-list">${item.ch.map((c, i) => {
                 let k = item.cls+item.sub+i; let isD = localStorage.getItem(k);
-                return `<div class="ch-item"><span>${name}</span><div class="check ${isD?'done':''}" onclick="tk('${k}','${item.sub}')">${isD?'✓':''}</div></div>`
+                return `<div class="ch-item"><span>${c.n}<span class="weightage">(${c.w})</span></span><div class="check ${isD?'done':''}" onclick="tk('${k}')">${isD?'✓':''}</div></div>`
             }).join('')}</div>`;
         (item.cls==='11th') ? c11.appendChild(card) : c12.appendChild(card);
     });
 }
 
-function tk(k, sub){ 
-    if(!localStorage.getItem(k)) {
-        localStorage.setItem(k,'1');
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-    } else {
-        localStorage.removeItem(k);
-    }
-    render();
-    checkFull(sub);
-}
+function tk(k){ localStorage.getItem(k)?localStorage.removeItem(k):localStorage.setItem(k,'1'); render(); }
 
-function checkFull(sub) {
-    DB.forEach(item => {
-        let d = 0; item.ch.forEach((_, i) => { if(localStorage.getItem(item.cls+item.sub+i)) d++; });
-        if(d === item.ch.length && !localStorage.getItem('gift_'+item.cls+item.sub)) {
-            const modal = document.getElementById('gift-modal');
-            const tag = document.getElementById('college-tag');
-            tag.innerText = (sub === 'Biology') ? 'AIIMS DELHI 🏥' : 'IIT BOMBAY 🎓';
-            modal.style.display = 'flex';
-            localStorage.setItem('gift_'+item.cls+item.sub, '1');
-        }
-    });
-}
-
-/* EXACT PRECISION TIMER LOGIC */
+/* UPDATED TIMER LOGIC */
 function setT(id, date) {
     const target = new Date(date).getTime();
     const update = () => {
         const diff = target - Date.now();
-        if(diff < 0) { document.getElementById(id).innerHTML = "EXAM ONGOING"; return; }
+        if(diff < 0) { document.getElementById(id).innerHTML = "EXAM DAY!"; return; }
         const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-        document.getElementById(id).innerHTML = `
-            <div class="unit"><span>${d}</span><label>Days</label></div>
-            <div class="unit"><span>${h}</span><label>Hrs</label></div>
-            <div class="unit"><span>${m}</span><label>Min</label></div>
-            <div class="unit"><span>${s}</span><label>Sec</label></div>`;
+        document.getElementById(id).innerHTML = `<div class="unit"><span>${d}</span><label>D</label></div><div class="unit"><span>${h}</span><label>H</label></div><div class="unit"><span>${m}</span><label>M</label></div><div class="unit"><span>${s}</span><label>S</label></div>`;
     };
     update(); setInterval(update, 1000);
 }
 
-// Fixed Dates for 2027 & 2028
+// Fixed Dates
 setT('t1','Jan 24, 2027 09:00:00'); setT('t2','Apr 06, 2027 09:00:00'); setT('t3','May 23, 2027 09:00:00'); setT('t4','May 02, 2027 14:00:00');
-setT('t5','Jan 24, 2028 09:00:00'); setT('t6','Apr 06, 2028 09:00:00'); setT('t7','May 23, 2028 09:00:00'); setT('t8','May 02, 2028 14:00:00');
+setT('t5','Jan 24, 2028 09:00:00'); setT('t6','Apr 06, 2028 09:00:00'); setT('t7','May 23, 2028 09:00:00'); setT('t8','May 07, 2028 14:00:00');
 
-/* ANALYTICS MODAL */
+/* ANALYTICS WITH CIRCLES */
 function openAna(){
     document.getElementById('pop').style.display='flex';
-    const getP = (c, subList) => {
-        let t=0, d=0; DB.filter(x=>x.cls===c && subList.includes(x.sub)).forEach(s=>{ s.ch.forEach((_,i)=>{ t++; if(localStorage.getItem(s.cls+s.sub+i)) d++; }); });
-        return Math.round((d/t)*100)||0;
+    const getP = (c, sub) => {
+        let item = DB.find(x => x.cls === c && x.sub === sub);
+        if(!item) return 0;
+        let d = 0; item.ch.forEach((_,i) => { if(localStorage.getItem(c+sub+i)) d++; });
+        return Math.round((d/item.ch.length)*100);
     };
-    
-    const row = (label, p, color) => `
-        <div style="margin-bottom:20px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                <b style="color:${color}">${label}</b><b>${p}%</b>
-            </div>
-            <div style="width:100%; height:12px; background:#111; border-radius:10px; overflow:hidden;">
-                <div style="width:${p}%; height:100%; background:${color}; box-shadow: 0 0 10px ${color}; transition: 1.5s;"></div>
-            </div>
+
+    const ring = (p, label, color) => `
+        <div class="mini-ring">
+            <svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="35" stroke-width="8"/><circle cx="40" cy="40" r="35" stroke="${color}" stroke-width="8" fill="none" stroke-linecap="round" style="stroke-dasharray: 220; stroke-dashoffset: ${220-(220*p/100)}; transition:1s;"/></svg>
+            <div class="percent" style="font-size:0.8rem;">${p}%</div>
+            <span class="label-text">${label}</span>
         </div>`;
 
-    document.getElementById('jee-p').innerHTML = row('11th Syllabus', getP('11th',['Maths','Physics','Chemistry']), 'var(--blue)') + row('12th Syllabus', getP('12th',['Maths','Physics','Chemistry']), 'var(--green)');
-    document.getElementById('neet-p').innerHTML = row('11th Syllabus', getP('11th',['Biology','Physics','Chemistry']), 'var(--pink)') + row('12th Syllabus', getP('12th',['Biology','Physics','Chemistry']), 'var(--purple)');
+    document.getElementById('j_ana').innerHTML = ring(getP('11th','Maths'),'11th M','#00d2ff') + ring(getP('12th','Maths'),'12th M','#00d2ff');
+    document.getElementById('n_ana').innerHTML = ring(getP('11th','Biology'),'11th B','#ff007a') + ring(getP('12th','Biology'),'12th B','#ff007a');
 }
 function closeAna(){ document.getElementById('pop').style.display='none'; }
 
-/* SNOW BACKGROUND */
+/* SNOW */
 const cvs = document.getElementById('snow'); const ctx = cvs.getContext('2d');
 let particles = [];
 function res(){ cvs.width=window.innerWidth; cvs.height=window.innerHeight; }
 window.onresize=res; res();
-class P { constructor(){ this.reset(); } reset(){ this.x=Math.random()*cvs.width; this.y=Math.random()*cvs.height; this.v=0.4+Math.random(); this.s=1+Math.random()*2; } update(){ this.y+=this.v; if(this.y>cvs.height) this.y=-10; } draw(){ ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); } }
-for(let i=0;i<60;i++) particles.push(new P());
-function ani(){ ctx.clearRect(0,0,cvs.width,cvs.height); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(ani); } ani();
+class P { constructor(){ this.r(); } r(){ this.x=Math.random()*cvs.width; this.y=Math.random()*cvs.height; this.v=0.5+Math.random(); this.s=1+Math.random()*2; } u(){ this.y+=this.v; if(this.y>cvs.height)this.y=-10; } d(){ ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); } }
+for(let i=0;i<50;i++) particles.push(new P());
+function ani(){ ctx.clearRect(0,0,cvs.width,cvs.height); particles.forEach(p=>{p.u();p.d();}); requestAnimationFrame(ani); } ani();
 
 render();
 </script>
